@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">University</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="FIO">ФИО</string>
+    <string name="ID">ID</string>
+    <string name="Rasp">Расписание</string>
+    <string name="Prof">Профиль</string>
+    <string name="Pas">Пароль</string>
+    <string name="Log">Логин</string>
+    <string name="Exit">Войти</string>
+    <string name="main">Вход</string>
+</resources>

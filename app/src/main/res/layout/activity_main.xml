@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:padding="40dp"
+    android:orientation="vertical"
+    android:background="@drawable/b"
+    >
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        />
+
+    <EditText
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded"
+        android:drawableLeft="@drawable/baseline_person_24"
+        android:drawablePadding="10dp"
+        android:hint="@string/Log"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textColorHint="@color/back"
+        android:textColor="@color/back"
+        />
+
+    <EditText
+        android:id="@+id/parol"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/Pas"
+        android:textColorHint="@color/back"
+        android:textColor="@color/back"
+        android:inputType="textPassword"
+        android:drawableLeft="@drawable/baseline_lock_24"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded"
+        android:padding="10dp"
+        />
+
+    <Button
+        android:id="@+id/enter_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/Exit"
+        android:textColor="@color/back"
+        android:backgroundTint="@color/lit_white"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/white"
+        android:textSize="17dp"
+        android:text="Учись! Пойми, что знание есть власть,\nУмей страдать вопросом и сомненьем,\nУмей любить с благоговеньем\nИ претворяй бунтующую страсть\nВ смысл красоты и веры благородной;\nЖиви умно, как человек свободный.\nН. П. Огарёв"
+        android:gravity="right"
+        android:layout_marginTop="270dp"
+        android:textStyle="italic"
+        >
+
+    </TextView>
+</androidx.appcompat.widget.LinearLayoutCompat>
