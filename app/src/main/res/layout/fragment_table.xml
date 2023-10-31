@@ -55,7 +55,7 @@
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="@+id/niz"
                 app:layout_constraintTop_toTopOf="@+id/niz"
-                android:text="8:30 - 10:00"
+                android:text="@string/time"
                 android:textColor="@color/white"
                 android:background="@drawable/fortable"
                 >
@@ -68,7 +68,7 @@
                 app:layout_constraintStart_toEndOf="@+id/time"
                 app:layout_constraintTop_toTopOf="@+id/niz"
                 app:layout_constraintEnd_toStartOf="@+id/room"
-                android:text="Проектирование и архитектура ПС"
+                android:text="Пара\nПроектирование и архитектура ПС"
                 android:textColor="@color/white"
                 android:background="@drawable/fortable"
                 >
@@ -81,7 +81,7 @@
                 app:layout_constraintStart_toEndOf="@+id/para"
                 app:layout_constraintTop_toTopOf="@+id/niz"
                 app:layout_constraintEnd_toEndOf="@+id/niz"
-                android:text="413 (1)"
+                android:text="Аудитория\n413 (1)"
                 android:textColor="@color/white"
                 android:background="@drawable/fortable"
                 >

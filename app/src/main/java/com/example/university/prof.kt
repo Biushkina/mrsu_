@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +32,13 @@ class prof : Fragment() {
     lateinit var infoList: Array<String>
     lateinit var imageList: Array<Int>
 
+
+    /*val token = "Bearer "
+    val retrofit = Retrofit.Builder()
+        .baseUrl("https://papi.mrsu.ru")
+        .addConverterFactory(GsonConverterFactory.create()).build()
+    val api = retrofit.create(api::class.java)
+*/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

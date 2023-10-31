@@ -64,13 +64,37 @@
         android:textStyle="bold"
         android:textSize="20dp"
         />
+    <Button
+        android:id="@+id/testt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Test"
+        android:textColor="@color/back"
+        android:backgroundTint="@color/lit_white"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/test_FIO"
+        android:text="hvydnv"
+        >
+    </TextView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/test_Id"
+        android:text="vdhshdvui"
+        ></TextView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textColor="@color/white"
         android:textSize="17dp"
-        android:text="Учись! Пойми, что знание есть власть,\nУмей страдать вопросом и сомненьем,\nУмей любить с благоговеньем\nИ претворяй бунтующую страсть\nВ смысл красоты и веры благородной;\nЖиви умно, как человек свободный.\nН. П. Огарёв"
+        android:text="@string/quote"
         android:gravity="right"
         android:layout_marginTop="270dp"
         android:textStyle="italic"
