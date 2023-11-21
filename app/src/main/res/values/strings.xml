@@ -2,15 +2,12 @@
     <string name="app_name">University</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="FIO">Биушкина Елена Ивановна</string>
-    <string name="ID">ID: 000083445</string>
     <string name="Rasp">Расписание</string>
     <string name="Prof">Профиль</string>
     <string name="Pas">Пароль</string>
     <string name="Log">Логин</string>
     <string name="Exit">Войти</string>
     <string name="main">Вход</string>
-    <string name="group">Факультет математики и информационных технологий, 305 группа</string>
     <string name="quote">Учись! Пойми, что знание есть власть,\nУмей страдать вопросом и сомненьем,\nУмей любить с благоговеньем\nИ претворяй бунтующую страсть\nВ смысл красоты и веры благородной;\nЖиви умно, как человек свободный.\nН. П. Огарёв</string>
     <string name="time">Время\n8:30 - 10:00\n10:10 - 11:40\n12:00 - 13:30\n13:45 - 15:15\n15:25 - 16:55\n17:05 - 18:35\n18:40 - 20:10</string>
 </resources>

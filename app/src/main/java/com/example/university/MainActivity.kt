@@ -1,64 +1,141 @@
 package com.example.university
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.example.university.retr.SharedPrefManager
+import com.example.university.retr.Token
 import com.example.university.retr.api
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
+
+    private val BASE_URL_TOKEN = "https://p.mrsu.ru"
+    private val BASE_URL_USER = "https://papi.mrsu.ru"
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val sharedPrefManager = SharedPrefManager.getInstance(this)
 
         val userLogin: EditText = findViewById(R.id.login)
         val userPass: EditText = findViewById(R.id.parol)
         val button: Button = findViewById(R.id.enter_button)
 
-        val linkToLk: Button = findViewById(R.id.enter_button)
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        //val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
-        val b:Button = findViewById(R.id.testt)
-        val test_FIo:TextView = findViewById(R.id.test_FIO)
-        val test_Id:TextView = findViewById(R.id.test_Id)
+        //Получение API
+        val tokenApi = createRetrofitClient(BASE_URL_TOKEN).create(api::class.java)
+        val userApi = createRetrofitClient(BASE_URL_USER).create(api::class.java)
 
-        val token = "Bearer Zwm6trqb_HyCPxTxEyqaVwYf9ZsBYL1wem3x2xUj56wRUP8BeaR03NKzYwoI0Cjk1mgMbJ5w82puV-8VNN83O2qIlC3CvfQYW0FIs0JYIGfZN39cYJHvW-xsMOY6INY0N_oatHBRvOELRc6Z2rXGIu-NDpC3gF1r6Vxk9S7DshBJdnCGYD1En0gKxXTleSr3D6p_QRdMC_NVn0w7Ea5jElakTL5NnoMK_tqsZ1EhMr-NNnACSFL9rL9atxF5xcMbAPlq5qrIZEJSW5-XBVxBnvmQ2_6neP6VCn9eioGz890o0VMeO7H_Lvk2MTso9zOO7QTslgGWh-cR8gAhu-DVDkZYyIO9PM01kLOHZUfBZvbY5VslyU7tUJqgPXbPfZG89dspo3HKOcmBiNm4XwDMOSD2z9Qh2igALNle4uxFIvlkigx_Hee6daWp7Txq2gFfU2aEM26rjda2gaQSvwpwSBsRbt8a5LW_wInEfbQoaUwmnj1XQd9nOpDy-BaQvx7vZW6ddtYP9jlfW329JnMwFM0RXAgYwK-g04I0qEFTIBBa9KsG"
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://papi.mrsu.ru")
-            .addConverterFactory(GsonConverterFactory.create()).build()
-        val mainApi = retrofit.create(api::class.java)
-
-        b.setOnClickListener {
+        button.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val user = mainApi.getUser(token)
-                runOnUiThread {
 
-                    test_FIo.text = user.FIO
-                    test_Id.text = user.StudentCod
+            try {
+                val userToken = tokenApi.getToken(
+                    username = userLogin.text.toString(),
+                    password = userPass.text.toString()
+                )
+                handleTokenResponse(userToken, sharedPrefManager, userApi)
+            } catch (e: Exception) {
+                authorization_handler(e)
+                Log.d("getUserToken_error", e.message.toString())
+            }
+            }
+        }
+    }
 
+    private fun authorization_handler(throwable: Throwable) {
+        Log.e("error_global", throwable.message.toString())
+        Log.e("error_local", throwable.localizedMessage)
+        runOnUiThread {
+            showErrorToast("Ошибка авторизации")
+        }
+    }
+
+    private fun handleTokenResponse(userToken: Token, sharedPrefManager: SharedPrefManager, userApi: api) {
+        if (userToken.accessToken != null) {
+            sharedPrefManager.saveToken(userToken)
+            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+
+                    //Получение информации о пользователе
+                    val user = userApi.getUser("Bearer ${userToken.accessToken}")
+                    sharedPrefManager.saveUserData(user)
+
+                    val userEducat = userApi.getUserEducation("Bearer ${userToken.accessToken}")
+                    sharedPrefManager.saveUserEducation(userEducat)
+
+                    //Получение информации о студенте
+                    /*val student = userApi.getStudent("Bearer ${userToken.accessToken}")
+                    sharedPrefManager.saveStudentData(student)*/
+
+                    /*Получение информации о дисциплинах студента
+                    val studentsemester = userApi.getStudentSemester("Bearer ${userToken.accessToken}")
+                    sharedPrefManager.saveStudentSemester(studentsemester)
+                    */
+                    //Получение информации о расписании студента
+                    //val studenttimetable = userApi.getStudentTimeTable("Bearer ${userToken.accessToken}", SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()))
+                    //sharedPrefManager.saveStudentTimeTable(studenttimetable)
+
+                    runOnUiThread {
+                        performActionsAfterAuthentication()
+                    }
+                } catch (e: Exception) {
+                    runOnUiThread {
+                        showErrorToast("Ошибка при получении пользовательских данных в handleTokenResponse ")
+                        Log.e("error_global", e.message.toString())
+                        Log.e("error_local", e.localizedMessage)
+                    }
                 }
             }
-        }
-        button.setOnClickListener {
-
-            val login = userLogin.text.toString().trim()
-            val pass = userPass.text.toString().trim()
-
-            if(login == "" || pass == "")
-                Toast.makeText(this, "Не все поля заполнены", Toast.LENGTH_LONG).show()
-            else {
-                val intent = Intent(this, bottom_menu::class.java)
-                startActivity(intent)
+        } else {
+            runOnUiThread {
+                showErrorToast("Ошибка при авторизации")
             }
         }
+    }
 
+    //Переход между окнами
+    private fun performActionsAfterAuthentication() {
+        val intent = Intent(this@MainActivity, bottom_menu::class.java)
+        startActivity(intent)
+    }
 
+    //Создание клиента
+    private fun createRetrofitClient(baseUrl: String): Retrofit {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    private fun showErrorToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

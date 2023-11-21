@@ -1,12 +1,22 @@
 package com.example.university
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.university.retr.SharedPrefManager
+import com.example.university.retr.api
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -20,6 +30,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [prof.newInstance] factory method to
  * create an instance of this fragment.
  */
+
 class prof : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -32,19 +43,30 @@ class prof : Fragment() {
     lateinit var infoList: Array<String>
     lateinit var imageList: Array<Int>
 
-
-    /*val token = "Bearer "
-    val retrofit = Retrofit.Builder()
-        .baseUrl("https://papi.mrsu.ru")
-        .addConverterFactory(GsonConverterFactory.create()).build()
-    val api = retrofit.create(api::class.java)
-*/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_prof, container, false)
+
+        SharedPrefManager.refreshDataUsingRefreshToken()
+        val view:View = inflater.inflate(R.layout.fragment_prof, container, false)
+        val image:ImageView = view.findViewById(R.id.profile_image)
+        val FIO:TextView = view.findViewById(R.id.student_name)
+        val ID:TextView = view.findViewById(R.id.student_id)
+        val group:TextView = view.findViewById(R.id.group)
+
+
+        val profilePhotoUrl = SharedPrefManager.getUserData()?.Photo?.UrlMedium
+        Glide.with(this)
+            .load(profilePhotoUrl)
+            .into(image)
+        FIO.text = SharedPrefManager.getUserData()?.FIO
+        ID.text = "ID: ${SharedPrefManager.getUserData()?.StudentCod}"
+        //group.text = SharedPrefManager.getUserEducation()?.Institution
+
+        return view
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +75,7 @@ class prof : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
+        val data = arguments?.getString("data")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -113,6 +135,7 @@ class prof : Fragment() {
             }
 
     }
+
 
 
 }
